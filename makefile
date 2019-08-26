@@ -11,7 +11,7 @@
 
 # Run "make help" for target help.
 
-MCU          = at90usb162
+MCU          = at90usb646
 ARCH         = AVR8
 BOARD        = NONE
 F_CPU        = 8000000
