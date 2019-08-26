@@ -121,12 +121,24 @@ void do_read( char * buffer)
 { int reg,val;
 
    if(sscanf(buffer,"R %i",&reg)!=1) printf("invalid register\n");
-   else ;
+   else if(reg >0xff || reg <0) printf("register out of range\n");
+   else 
+   { val=(*(volatile uint8_t *)reg);
+     printf("R 0x%x 0x%x\n",reg,val);
+   }
  }
 void do_write(char * buffer)
 { int reg,val;
 
   if(sscanf(buffer,"W %i %i",&reg,&val)!=2) printf("invalid register or value");
+  else if(reg >0xff || reg <0) printf("register out of range\n");
+  else if(val >0xff || val <0) printf("value out of range\n");
+  else
+  {
+    (*(volatile uint8_t *)reg)=val;
+    printf("%s\n",buffer);
+   }
+
 }
 void do_error(char * buffer)
 {
