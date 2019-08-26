@@ -66,9 +66,9 @@ int main(void)
 	while(1)
 	{
            fgets(buffer,29,stdin);
-           if(!strncmp(buffer,"BOOT",4) Jump_To_Bootloader();
-           elseif(!strncmp(buffer,"W",1) do_write(buffer);
-           elseif(!strncmp(buffer,"R",1) do_read(buffer);
+           if(!strncmp(buffer,"BOOT",4)) Jump_To_Bootloader();
+           else if(!strncmp(buffer,"W",1)) do_write(buffer);
+           else if(!strncmp(buffer,"R",1)) do_read(buffer);
            else do_error(buffer);
 	} 
 }
