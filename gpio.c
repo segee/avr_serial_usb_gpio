@@ -51,21 +51,25 @@ static FILE USBSerialStream;  //This will become stdin and stdout
 
 
 void bruces_usb_init(void);
+void do_read(char *);
+void do_write(char *);
+void do_error(char *);
 
 
 int main(void)
 {
+        char buffer[30];
+        Bootloader_Jump_Check();  
 	bruces_usb_init();  // get the USB stuff going
 
 
 	while(1)
 	{
-               while(!CONNECTED)
-               {
-                  USB_USBTask();
-                  CDC_Device_USBTask(&VirtualSerial_CDC_Interface);
-               }
-
+           fgets(buffer,29,stdin);
+           if(!strncmp(buffer,"BOOT",4) Jump_To_Bootloader();
+           elseif(!strncmp(buffer,"W",1) do_write(buffer);
+           elseif(!strncmp(buffer,"R",1) do_read(buffer);
+           else do_error(buffer);
 	} 
 }
 
@@ -112,6 +116,25 @@ void Jump_To_Bootloader(void)
     wdt_enable(WDTO_250MS);
     for (;;);
 }
+
+void do_read( char * buffer)
+{ int reg,val;
+
+   if(sscanf(buffer,"R %i",&reg)!=1) printf("invalid register\n");
+   else ;
+ }
+void do_write(char * buffer)
+{ int reg,val;
+
+  if(sscanf(buffer,"W %i %i",&reg,&val)!=2) printf("invalid register or value");
+}
+void do_error(char * buffer)
+{
+  printf("valid commands are: W to write, R to read and BOOT to go to bootloader\n");
+  printf("%s is not a valid command\n",buffer);
+
+}
+
 
 /* The following two event handlers are important.  When the USB interface  */
 /* gets the event, we need to use the CDC routines to deal with them           */ 
