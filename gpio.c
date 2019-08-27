@@ -40,9 +40,26 @@ extern USB_ClassInfo_CDC_Device_t VirtualSerial_CDC_Interface;  //at the bottom 
 //credit to LUFA Library
 uint32_t Boot_Key ATTR_NO_INIT;
 #define MAGIC_BOOT_KEY            0xDC42ACCA
+#if defined (__AVR_AT90USB82__)
+#define BOOTLOADER_START_ADDRESS 0x1000
+#elif defined (__AVR_AT90USB162__)
+#define BOOTLOADER_START_ADDRESS 0x3000
+#elif defined (__AVR_AT90USB646__)
+#define BOOTLOADER_START_ADDRESS 0xf000
+#elif defined (__AVR_AT90USB647__)
+#define BOOTLOADER_START_ADDRESS 0xf000
+#elif defined (__AVR_AT90USB1286__)
+#define BOOTLOADER_START_ADDRESS 0x1e000
+#elif defined (__AVR_AT90USB1287__)
+#define BOOTLOADER_START_ADDRESS 0x1e000
+#else
+error in processor type
+#endif
+
 #define FLASH_SIZE_BYTES 65536
 #define BOOTLOADER_SEC_SIZE_BYTES 4096
-#define BOOTLOADER_START_ADDRESS  (FLASH_SIZE_BYTES - BOOTLOADER_SEC_SIZE_BYTES)
+#define BOOTLOADER_START_ADDRESS 0xf000
+
 void Bootloader_Jump_Check(void) ATTR_INIT_SECTION(3);
 void Jump_To_Bootloader(void);
 
