@@ -38,8 +38,8 @@ extern USB_ClassInfo_CDC_Device_t VirtualSerial_CDC_Interface;  //at the bottom 
 
 #define CONNECTED (VirtualSerial_CDC_Interface.State.ControlLineStates.HostToDevice & CDC_CONTROL_LINE_OUT_DTR)
 //credit to LUFA Library
-uint32_t Boot_Key ATTR_NO_INIT;
-#define MAGIC_BOOT_KEY            0xDC42ACCA
+volatile uint16_t Boot_Key ATTR_NO_INIT;
+#define MAGIC_BOOT_KEY            0x1234
 #if defined (__AVR_AT90USB82__)
 #define BOOTLOADER_START_ADDRESS 0x1000
 #elif defined (__AVR_AT90USB162__)
@@ -56,11 +56,8 @@ uint32_t Boot_Key ATTR_NO_INIT;
 error in processor type
 #endif
 
-#define FLASH_SIZE_BYTES 65536
-#define BOOTLOADER_SEC_SIZE_BYTES 4096
-#define BOOTLOADER_START_ADDRESS 0xf000
 
-void Bootloader_Jump_Check(void) ATTR_INIT_SECTION(3);
+void Bootloader_Jump_Check(void) ATTR_INIT_SECTION(3); //this runs before main (don't call it from main like I was trying to do!)
 void Jump_To_Bootloader(void);
 
 
@@ -76,7 +73,6 @@ void do_error(char *);
 int main(void)
 {
         char buffer[30];
-        Bootloader_Jump_Check();  
 	bruces_usb_init();  // get the USB stuff going
 
 
